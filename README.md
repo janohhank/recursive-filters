@@ -1,25 +1,14 @@
 # RecursiveFilters
-Recursive filter implementations which works on digital samples.
+Recursive filter implementations which works on digital samples. In signal processing, a recursive filter is a type of filter which re-uses one or more of its outputs as an input.
 
-In signal processing, a recursive filter is a type of filter which re-uses one or more of its outputs as an input.
-
-Inclues a makefile, tested in Debian Stretch and g++ 6.3.0.
+### Build
+Includes a simple makefile for the C++ build. Tested in Debian Stretch with g++ 6.3.0 and the plotter script with Python 3.5.3.
 
 ### Already implemented filters:
-Low-pass filter : https://en.wikipedia.org/wiki/Low-pass_filter
+**Low-pass filter**
 
-High-pass filter : https://en.wikipedia.org/wiki/High-pass_filter
+https://en.wikipedia.org/wiki/Low-pass_filter
 
-### The sample example application output:
+**High-pass filter**
 
-Original data: random normal distribution values in a histogram
-
-![alt text](https://raw.githubusercontent.com/janohhank/RecursiveFilters/master/doc/raw-data.png)
-
-Low-pass filtered data:
-
-![alt text](https://raw.githubusercontent.com/janohhank/RecursiveFilters/master/doc/low-pass-filtered-data.png)
-
-High-pass filtered data:
-
-![alt text](https://raw.githubusercontent.com/janohhank/RecursiveFilters/master/doc/high-pass-filtered-data.png)
+https://en.wikipedia.org/wiki/High-pass_filter

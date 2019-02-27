@@ -14,17 +14,17 @@ parser = argparse.ArgumentParser(description='')
 parser.add_argument('--originalData',required=True,type=str,help='')
 parser.add_argument('--lowPassFilteredData',required=True,type=str,help='')
 parser.add_argument('--highPassFilteredData',required=True,type=str,help='')
-parser.add_argument('--stepSize',required=False,type=float,help='')
+parser.add_argument('--startValue',required=True,type=float,help='')
+parser.add_argument('--stepSize',required=True,type=float,help='')
+parser.add_argument('--numSamples',required=True,type=float,help='')
 
 args = parser.parse_args()
 originalDataFilePath = args.originalData
 lowPassFilteredDataFilePath = args.lowPassFilteredData
 highPassFilteredDataFilePath = args.highPassFilteredData
+startValue = args.startValue
 stepSize = args.stepSize
-
-numSamples = 250
-startValue = 0.1
-stepSize = 0.1
+numSamples = args.numSamples
 endValue = startValue + numSamples * stepSize
 
 originalData = []

@@ -9,13 +9,13 @@ namespace filter{
 ** @author Kisházi "janohhank" János
 **/
 template <typename ValueType>
-class LowPassFilter{
+class LowPassFilter final{
 	private:
 		/*
 		* The filter alpha factor.
 		* How percentage of the input and output data will used.
 		*/
-		ValueType alphaFactor;
+		const ValueType alphaFactor;
 
 		/*
 		* The previous result value of the filter.
@@ -25,9 +25,10 @@ class LowPassFilter{
 		/**
 		** Constructs a new instance.
 		**/
-		LowPassFilter(const ValueType alphaFactor){
-			this->alphaFactor = alphaFactor;
-			this->previousOutputValue = 0.0;
+		LowPassFilter(
+			const ValueType& alphaFactor
+		) : alphaFactor(alphaFactor), previousOutputValue(0.0){
+			//Intentionally NOOP.
 		}
 
 		/**
@@ -51,8 +52,8 @@ class LowPassFilter{
 		** @param currentInputValue, the new value which want to be filtered.
 		** @return the filtered data.
 		**/
-		ValueType process(const ValueType currentInputValue){
-			const ValueType result =
+		ValueType process(const ValueType& currentInputValue){
+			const ValueType& result =
 				currentInputValue * alphaFactor + (1.0 - alphaFactor) * previousOutputValue;
 
 			previousOutputValue = result;

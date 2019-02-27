@@ -9,13 +9,13 @@ namespace filter{
 ** @author Kisházi "janohhank" János
 **/
 template <typename ValueType>
-class HighPassFilter{
+class HighPassFilter final{
 	private:
 		/*
 		* The filter alpha factor.
 		* How percentage of the input and output data will used.
 		*/
-		ValueType alphaFactor;
+		const ValueType alphaFactor;
 
 		/*
 		* The previous result/output value of the filter.
@@ -30,10 +30,10 @@ class HighPassFilter{
 		/**
 		** Constructs a new instance.
 		**/
-		HighPassFilter(const ValueType alphaFactor){
-			this->alphaFactor = alphaFactor;
-			this->previousOutputValue = 0.0;
-			this->previousInputValue = 0.0;
+		HighPassFilter(
+			const ValueType& alphaFactor
+		) : alphaFactor(alphaFactor), previousOutputValue(0.0), previousInputValue(0.0){
+			//Intentionally NOOP.
 		}
 
 		/**
@@ -58,8 +58,8 @@ class HighPassFilter{
 		** @param currentInputValue, the new value which want to be filtered.
 		** @return the filtered data.
 		**/
-		ValueType process(const ValueType currentInputValue){
-			const ValueType result =
+		ValueType process(const ValueType& currentInputValue){
+			const ValueType& result =
 				alphaFactor * previousOutputValue + alphaFactor * (currentInputValue - previousInputValue)
 			;
 
