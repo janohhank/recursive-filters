@@ -27,7 +27,7 @@ class LowPassFilter final{
 		**/
 		LowPassFilter(
 			const ValueType& alphaFactor
-		) : alphaFactor(alphaFactor), previousOutputValue(0.0){
+		) : alphaFactor(alphaFactor){
 			//Intentionally NOOP.
 		}
 
@@ -36,6 +36,16 @@ class LowPassFilter final{
 		**/
 		~LowPassFilter(){
 			//Intentionally NOOP.
+		}
+
+		/**
+		** Initialize the filter with the first input value.
+		** @param firstInputValue the first measured input value.
+		**/
+		void initializeFilter(
+			const ValueType& firstInputValue
+		){
+			previousOutputValue = firstInputValue;
 		}
 
 		/**

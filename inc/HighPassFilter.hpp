@@ -44,6 +44,17 @@ class HighPassFilter final{
 		}
 
 		/**
+		** Initialize the filter with the first input value.
+		** @param firstInputValue the first measured input value.
+		**/
+		void initializeFilter(
+			const ValueType& firstInputValue
+		){
+			previousInputValue = firstInputValue;
+			previousOutputValue = firstInputValue;
+		}
+
+		/**
 		** Filters the input data.
 		**
 		** y(i) = alpha * y(i - 1) + alpha * (x(i) - x(i - 1))

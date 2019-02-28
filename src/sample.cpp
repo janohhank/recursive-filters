@@ -4,11 +4,11 @@
 ** @author Kisházi "janohhank" János
 **/
 
-//Recursive filters.
+// Recursive filters.
 #include "../inc/LowPassFilter.hpp"
 #include "../inc/HighPassFilter.hpp"
 
-//STD includes.
+// STD includes.
 #include <map>
 #include <memory>
 #include <random>
@@ -77,7 +77,7 @@ int main(){
 			0.1f,
 			0.1f,
 			5.0f,
-			3.0f,
+			0.5f,
 			NUM_SAMPLES
 		)
 	;
@@ -85,15 +85,27 @@ int main(){
 	unique_ptr<LowPassFilter<double>> lowPassFilter = make_unique<LowPassFilter<double>>(0.2);
 	unique_ptr<HighPassFilter<double>> highPassFilter = make_unique<HighPassFilter<double>>(0.8);
 
+	bool firstMeasure = true;
+
 	print(__FILE__,"INFO","Low pass filtering.");
 	vector<float> lowPassFilteredData;
 	for(const auto& data : generatedRandomData){
+		if(firstMeasure){
+			lowPassFilter->initializeFilter(data);
+			firstMeasure = false;
+		}
 		lowPassFilteredData.emplace_back(lowPassFilter->process(data));
 	}
+
+	firstMeasure = true;
 
 	print(__FILE__,"INFO","High pass filtering.");
 	vector<float> highPassFilteredData;
 	for(const auto& data : generatedRandomData){
+		if(firstMeasure){
+			highPassFilter->initializeFilter(data);
+			firstMeasure = false;
+		}
 		highPassFilteredData.emplace_back(highPassFilter->process(data));
 	}
 
