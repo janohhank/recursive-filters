@@ -13,6 +13,6 @@ https://en.wikipedia.org/wiki/Low-pass_filter
 
 https://en.wikipedia.org/wiki/High-pass_filter
 
-![alt text](https://raw.githubusercontent.com/janohhank/RecursiveFilters/tree/master/doc/result-sin.png)
+![alt text](https://raw.githubusercontent.com/janohhank/RecursiveFilters/master/doc/result-sin.png)
 
-![alt text](https://raw.githubusercontent.com/janohhank/RecursiveFilters/tree/master/doc/result-Asin.png)
+![alt text](https://raw.githubusercontent.com/janohhank/RecursiveFilters/master/doc/result-Asin.png)
