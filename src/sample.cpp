@@ -1,5 +1,5 @@
 /**
-** @brief This simple example use the implemented recursive filters.
+** @brief This is an example to how to use the implemented recursive filters.
 **
 ** @author Kisházi "janohhank" János
 **/
@@ -33,6 +33,38 @@ void print(
 }
 
 /**
+** Generates random linear data translated with random number (from normal distribution).
+** Result is the y values from y = i * normalDist()
+** @param startValue is the value from start the x values
+** @param stepSize is the step value
+** @param mean the mean of the normal distribution
+** @param stdev the standard deviation of the normal distribution
+** @param numSample is the count of the required samples size
+**/
+template <typename DataType>
+vector<DataType> generateLinearRandomData(
+	const DataType& startValue,
+	const DataType& stepSize,
+	const DataType& mean,
+	const DataType& stdev,
+	const unsigned int& numSamples
+){
+	random_device rd;
+	mt19937 random(rd());
+	normal_distribution<DataType> normalDistribution(mean, stdev);
+
+	DataType currentValue = startValue;
+	vector<DataType> results;
+	for(unsigned int i = 0; i < numSamples; ++i){
+		const auto& translation = normalDistribution(random);
+		results.emplace_back(i * translation);
+		currentValue += stepSize;
+	}
+
+	return results;
+}
+
+/**
 ** Generates random sinusoid data translated with random number (from normal distribution).
 ** Result is the y values from y = sin(x) * normalDist()
 ** @param startValue is the value from start the x values
@@ -42,7 +74,7 @@ void print(
 ** @param numSample is the count of the required samples size
 **/
 template <typename DataType>
-vector<DataType> generateRandomData(
+vector<DataType> generateSinusoidRandomData(
 	const DataType& startValue,
 	const DataType& stepSize,
 	const DataType& mean,
@@ -65,47 +97,72 @@ vector<DataType> generateRandomData(
 }
 
 /**
+** Example usage information.
+**/
+void usage(char *argv[]){
+	cout << "[" << argv[0] << "]" << " Requires the following arguments:"
+	<< " NUM-SAMPLES" << " START-VALUE" << " STEP-SIZE" << " NORMAL-DIST-MEAN" << " NORMAL-DIST-STDEV" << " LOW-PASS-FILTER-FACTOR" << " HIGH-PASS-FILTER-FACTOR" << " MODE" << endl
+	<< "	Where: " << endl
+	<< "		NUM-SAMPLES ranom generated data sample size." << endl
+	<< "		START-VALUE ranom generated data start value." << endl
+	<< "		STEP-SIZE ranom generated data step size between values." << endl
+	<< "		NORMAL-DIST-MEAN normal distribution mean." << endl
+	<< "		NORMAL-DIST-MEAN normal distribution standard deviation." << endl
+	<< "		LOW-PASS-FILTER-FACTOR smoothing factor, it can be [0,1]." << endl
+	<< "		HIGH-PASS-FILTER-FACTOR smoothing factor, it can be [0,1]." << endl
+	<< "		MODE is the random generated data mode, it can be [SINUSOID,LINEAR]." << endl;
+}
+
+/**
 ** Program main entry point.
 ** In this mini example the program can't be parametrized from console.
 **/
-int main(){
-	const unsigned int NUM_SAMPLES = 250;
+int main(int argc, char *argv[]){
+	if(argc < 9){
+		usage(argv);
+		return 1;
+	}
+	const unsigned int NUM_SAMPLES = stoi(argv[1]);
+	const float START_VALUE = stof(argv[2]);
+	const float STEP_SIZE = stof(argv[3]);
+	const float NORMAL_DIST_MEAN = stof(argv[4]);
+	const float NORMAL_DIST_STDEV = stof(argv[5]);
+	const float LOW_PASS_FILTER_FACTOR = stof(argv[6]);
+	const float HIGH_PASS_FILTER_FACTOR = stof(argv[7]);
+	const string MODE = argv[8];
+
+	vector<float> (*dataGenerator)(const float&, const float&, const float&, const float&, const unsigned int&);
+	if(MODE == "SINUSOID"){
+		dataGenerator = &generateSinusoidRandomData;
+	}else if(MODE == "LINEAR"){
+		dataGenerator = &generateLinearRandomData;
+	}else{
+		throw logic_error("Unrecognized mode type: " + MODE);
+	}
 
 	print(__FILE__,"INFO","Generating data.");
 	const auto& generatedRandomData =
-		generateRandomData<float>(
-			0.1f,
-			0.1f,
-			5.0f,
-			0.5f,
+		dataGenerator(
+			START_VALUE,
+			STEP_SIZE,
+			NORMAL_DIST_MEAN,
+			NORMAL_DIST_STDEV,
 			NUM_SAMPLES
 		)
 	;
 
-	unique_ptr<LowPassFilter<double>> lowPassFilter = make_unique<LowPassFilter<double>>(0.2);
-	unique_ptr<HighPassFilter<double>> highPassFilter = make_unique<HighPassFilter<double>>(0.8);
-
-	bool firstMeasure = true;
+	unique_ptr<LowPassFilter<float>> lowPassFilter = make_unique<LowPassFilter<float>>(LOW_PASS_FILTER_FACTOR);
+	unique_ptr<HighPassFilter<float>> highPassFilter = make_unique<HighPassFilter<float>>(HIGH_PASS_FILTER_FACTOR);
 
 	print(__FILE__,"INFO","Low pass filtering.");
 	vector<float> lowPassFilteredData;
 	for(const auto& data : generatedRandomData){
-		if(firstMeasure){
-			lowPassFilter->initializeFilter(data);
-			firstMeasure = false;
-		}
 		lowPassFilteredData.emplace_back(lowPassFilter->process(data));
 	}
-
-	firstMeasure = true;
 
 	print(__FILE__,"INFO","High pass filtering.");
 	vector<float> highPassFilteredData;
 	for(const auto& data : generatedRandomData){
-		if(firstMeasure){
-			highPassFilter->initializeFilter(data);
-			firstMeasure = false;
-		}
 		highPassFilteredData.emplace_back(highPassFilter->process(data));
 	}
 

@@ -3,7 +3,7 @@
 namespace filter{
 
 /**
-** @brief Simple high-pass filter implementation.
+** @brief High-pass filter implementation which works on digital samples.
 **
 ** @param ValueType the type of the alpha factor and the data.
 ** @author Kisházi "janohhank" János
@@ -26,13 +26,18 @@ class HighPassFilter final{
 		* The previous input value.
 		*/
 		ValueType previousInputValue;
+
+		/*
+		* In the beginning initialize the filter with the first input value.
+		*/
+		bool initialized;
 	public:
 		/**
 		** Constructs a new instance.
 		**/
 		HighPassFilter(
 			const ValueType& alphaFactor
-		) : alphaFactor(alphaFactor), previousOutputValue(0.0), previousInputValue(0.0){
+		) : alphaFactor(alphaFactor), initialized(false){
 			//Intentionally NOOP.
 		}
 
@@ -41,17 +46,6 @@ class HighPassFilter final{
 		**/
 		~HighPassFilter(){
 			//Intentionally NOOP.
-		}
-
-		/**
-		** Initialize the filter with the first input value.
-		** @param firstInputValue the first measured input value.
-		**/
-		void initializeFilter(
-			const ValueType& firstInputValue
-		){
-			previousInputValue = firstInputValue;
-			previousOutputValue = firstInputValue;
 		}
 
 		/**
@@ -70,6 +64,13 @@ class HighPassFilter final{
 		** @return the filtered data.
 		**/
 		ValueType process(const ValueType& currentInputValue){
+			if(!initialized){
+				previousInputValue = currentInputValue;
+				previousOutputValue = currentInputValue;
+				initialized = true;
+				return currentInputValue;
+			}
+
 			const ValueType& result =
 				alphaFactor * previousOutputValue + alphaFactor * (currentInputValue - previousInputValue)
 			;

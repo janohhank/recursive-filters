@@ -3,7 +3,7 @@
 namespace filter{
 
 /**
-** @brief Simple low-pass filter implementation.
+** @brief Low-pass filter implementation which works on digital samples.
 **
 ** @param ValueType the type of the alpha factor and the data.
 ** @author Kisházi "janohhank" János
@@ -21,13 +21,18 @@ class LowPassFilter final{
 		* The previous result value of the filter.
 		*/
 		ValueType previousOutputValue;
+
+		/*
+		* In the beginning initialize the filter with the first input value.
+		*/
+		bool initialized;
 	public:
 		/**
 		** Constructs a new instance.
 		**/
 		LowPassFilter(
 			const ValueType& alphaFactor
-		) : alphaFactor(alphaFactor){
+		) : alphaFactor(alphaFactor), initialized(false){
 			//Intentionally NOOP.
 		}
 
@@ -36,16 +41,6 @@ class LowPassFilter final{
 		**/
 		~LowPassFilter(){
 			//Intentionally NOOP.
-		}
-
-		/**
-		** Initialize the filter with the first input value.
-		** @param firstInputValue the first measured input value.
-		**/
-		void initializeFilter(
-			const ValueType& firstInputValue
-		){
-			previousOutputValue = firstInputValue;
 		}
 
 		/**
@@ -63,6 +58,12 @@ class LowPassFilter final{
 		** @return the filtered data.
 		**/
 		ValueType process(const ValueType& currentInputValue){
+			if(!initialized){
+				previousOutputValue = currentInputValue;
+				initialized = true;
+				return currentInputValue;
+			}
+
 			const ValueType& result =
 				currentInputValue * alphaFactor + (1.0 - alphaFactor) * previousOutputValue;
 
