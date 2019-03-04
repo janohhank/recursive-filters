@@ -1,4 +1,4 @@
 all:
-	g++ -std=c++17 src/sample.cpp -o Filter.bin -W -Wall -Wextra -pedantic
+	g++ -std=c++17 src/bin/RecursiveFilters.cpp -o RecursiveFilters.bin -W -Wall -Wextra -pedantic
 clean:
-	rm Filter.bin
+	rm RecursiveFilters.bin

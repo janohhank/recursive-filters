@@ -5,8 +5,8 @@
 **/
 
 // Recursive filters.
-#include "../inc/LowPassFilter.hpp"
-#include "../inc/HighPassFilter.hpp"
+#include "../../inc/filter/LowPassFilter.hpp"
+#include "../../inc/filter/HighPassFilter.hpp"
 
 // STD includes.
 #include <map>
