@@ -115,7 +115,6 @@ void usage(char *argv[]){
 
 /**
 ** Program main entry point.
-** In this mini example the program can't be parametrized from console.
 **/
 int main(int argc, char *argv[]){
 	if(argc < 9){
@@ -180,7 +179,7 @@ int main(int argc, char *argv[]){
 	lowPassFilteredDataFile.close();
 	highPassFilteredDataFile.close();
 
-	print(__FILE__,"INFO","Results are saved: originalData.txt | lowPassFilteredData.txt | highPassFilteredData.txt");
+	print(__FILE__,"INFO","Results are saved into: originalData.txt | lowPassFilteredData.txt | highPassFilteredData.txt");
 
 	return 0;
 }
